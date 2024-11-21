@@ -1,5 +1,5 @@
 ### MongoDB connection string pattern
-"mongodb+srv://<db_username>:<db_password>@cluster0.s3euj.mongodb.net/< dbname >?retryWrites=true&w=majority&appName=Cluster0"
+"mongodb+srv://<db_username>:<db_password>@cluster0.s3euj.mongodb.net/<-dbname->?retryWrites=true&w=majority&appName=Cluster0"
 
 ### Users Schema
 - email: { type: String, index: true, unique: true }
