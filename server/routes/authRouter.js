@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const UserModel = require("./../models/userModal");
-const { z, string } = require("zod");
+const { z } = require("zod");
 
 const router = express.Router();
 const userAuthSchema = z.object({
@@ -48,6 +48,26 @@ router.post("/signup", async (req, res) => {
     }
 
     res.status(201).json({ success: true });
+});
+
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    const fetchedUser = await UserModel.findOne({ email: email });
+    console.log(fetchedUser);
+
+    if (!fetchedUser) {
+        return res
+            .status(404)
+            .json({ success: false, message: "User not found." });
+    }
+
+    if (!(await bcrypt.compare(password, fetchedUser.password))) {
+        return res
+            .status(401)
+            .json({ success: false, message: "Invaid password" });
+    }
+
+    res.send("ended");
 });
 
 module.exports = router;
