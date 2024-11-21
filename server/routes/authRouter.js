@@ -67,7 +67,10 @@ router.post("/login", async (req, res) => {
             .json({ success: false, message: "Invaid password" });
     }
 
-    res.send("ended");
+    //user is valid - provide access token and refresh token
+    const payload = {id: fetchedUser._id , username:fetchedUser.username, isadmin:fetchedUser.isAdmin}
+
+    res.json(payload);
 });
 
 module.exports = router;
