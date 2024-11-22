@@ -56,7 +56,8 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const fetchedUser = await UserModel.findOne({ email: email });
-    console.log(fetchedUser);
+    console.log("user trying to login");
+    console.assert(fetchedUser, );
 
     if (!fetchedUser) {
         return res

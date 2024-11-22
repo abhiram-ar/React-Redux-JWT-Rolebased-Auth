@@ -1,34 +1,35 @@
 require("dotenv").config();
 const express = require("express");
 const dbConnect = require("./config/db.js");
-const authRouter = require("./routes/authRouter.js")
-const verifyJWT = require("./middlewares/verifyJWT.js")
+const authRouter = require("./routes/authRouter.js");
+const verifyJWT = require("./middlewares/verifyJWT.js");
 const refresh = require("./controllers/refresh.js");
+const logoutController = require("./controllers/logoutController.js");
 const cookieParser = require("cookie-parser");
 
 //app initailization
-dbConnect()
+dbConnect();
 const app = express();
 
 //middlewares
-app.use(cookieParser())
-app.use(express.json())
+app.use(cookieParser());
+app.use(express.json());
 
-
-app.get( "/", (req, res) => {
+app.get("/", (req, res) => {
     res.send("hello world");
 });
 
-app.post("/refresh", refresh)
+app.post("/refresh", refresh);
+app.post("/logout", logoutController);
 
 //official rotues
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
 
 //protected rotues
-app.use(verifyJWT)
-app.get("/home", (req, res)=>{
-    res.send("home")
-})
+app.use(verifyJWT);
+app.get("/home", (req, res) => {
+    res.send("home");
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
