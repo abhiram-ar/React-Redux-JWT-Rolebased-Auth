@@ -26,6 +26,9 @@ app.use("/auth", authRouter)
 
 //protected rotues
 app.use(verifyJWT)
+app.get("/home", (req, res)=>{
+    res.send("home")
+})
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

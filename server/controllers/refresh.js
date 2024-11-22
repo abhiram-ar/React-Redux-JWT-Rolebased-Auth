@@ -18,10 +18,9 @@ const refresh = async (req, res) => {
         // the cookie needs to be identical in name and option, for browser to clear them
         // maxAge and expires is an exception
         res.clearCookie("refreshJWT", { httpOnly: true });
-        return res.send("refresh token not found in DB");
+        return res.status(403).send("refresh token not found in DB");
     }
 
-    console.log(fetchedTokenDetails);
     jwt.verify(
         refreshJWT,
         process.env.REFRESH_TOKEN_SECRECT,
