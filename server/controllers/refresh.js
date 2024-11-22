@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const RefreshTokenModel = require("./../models/jwtModel");
-const UserModel = require("./../models/userModal")
+const UserModel = require("./../models/userModal");
 
 const refresh = async (req, res) => {
     const { refreshJWT } = req.cookies;
@@ -35,8 +35,8 @@ const refresh = async (req, res) => {
             }
             try {
                 console.log(decoded);
-                const fetchedUser = await UserModel.findById(decoded.id)
-           
+                const fetchedUser = await UserModel.findById(decoded.id);
+
                 const payload = {
                     id: fetchedUser._id,
                     username: fetchedUser.username,
@@ -52,7 +52,7 @@ const refresh = async (req, res) => {
                 return res.status(200).json(newAccessToken);
             } catch (error) {
                 console.log(`refreshing token: user not found`);
-                console.log(error)
+                console.log(error);
                 return res
                     .status(403)
                     .json({ sucess: false, message: "user not found in DB" });
