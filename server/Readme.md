@@ -27,6 +27,11 @@
 
 ## Critical Middlewares
 #### `refresh()`
+- 200 ok - refresh token has been verified and new access token is created with latest user details 
 - 401 error - cookie of the the name "refreshJWT" not found in the HTTP header
 - 403 error - refresh token send to the server is not valid or expired
-- 200 ok - refresh token has been verified and new access token is created with latest user details 
+
+#### `logout()`
+- 200 ok - use logged out sucessfully
+- 204 no content - if the request does not contain valid refresh token to logout user
+- 500 internal error - error while deleleting user session/token from the DB
