@@ -99,7 +99,7 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.log(`error while saving refresh token to DB`);
         console.log(error);
-        return res.status(500).json({success:false, message:"error while saving JWT to DB"})
+        return res.status(500).json({success:false, message:"error while saving JWT to DBF"})
     }
 
     res.json(accessToken);
