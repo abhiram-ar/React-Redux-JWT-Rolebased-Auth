@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const dbConnect = require("./config/db.js");
 const authRouter = require("./routes/authRouter.js")
+const verifyJWT = require("./middlewares/verifyJWT.js")
+const refresh = require("./controllers/refresh.js")
 
 //app initailization
 dbConnect()
@@ -10,12 +12,17 @@ const app = express();
 //middlewares
 app.use(express.json())
 
-app.get("/", (req, res) => {
+app.get( "/", (req, res) => {
     res.send("hello world");
 });
 
+app.post("/refresh", refresh)
+
 //official rotues
 app.use("/auth", authRouter)
+
+//protected rotues
+app.use(verifyJWT)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
