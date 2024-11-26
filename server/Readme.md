@@ -22,7 +22,7 @@
 - Both the tokens are send back to the client.
 - For the following authentication after the first auth, the client only need to send the access token in the "Authorization" header, if the access token is valid and not expired, user is seemlessly authenticated.
 - If the access token is expired, then the client can visit the "/refresh" endpoint to get a new access token by providing a curresponding refresh token
-- // add logout policy
+- 
 
 
 ## Critical Middlewares
