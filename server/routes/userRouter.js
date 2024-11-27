@@ -1,7 +1,8 @@
 const express = require("express");
 const userModal = require("../models/userModal");
-const { route } = require("./authRouter");
 const router = express.Router();
+const cloudinary = require("./../config/cloudinary");
+const { upload } = require("./../config/multerConfig");
 
 router.get("/profile", async (req, res) => {
     const user = res.user;
@@ -21,9 +22,34 @@ router.get("/profile", async (req, res) => {
     }
 });
 
-router.patch("/updateProfilePic", (req, res)=>{
+router.patch("/updateProfilePic", upload.single("image"), async (req, res) => {
+    console.log("naem", req.file);
     console.log("update profile hit");
-    res.status(200).json({sucess: true, message: "updates"})
-})
+
+    try {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path);
+        console.log("cloudinary: image upload Sucessfull");
+        console.log(uploadResult);
+        const result = await userModal.findByIdAndUpdate(res.user.id, {
+            profilePicURL: uploadResult.url,
+        });
+
+        console.log("db res");
+        console.log(res)
+
+        return res
+            .status(200)
+            .json({
+                success: true,
+                message: "file upload sucessful and updatedDB",
+                profilePicPublicURL: upload.url,
+            });
+    } catch (error) {
+        console.log("cloudinary: error while uploading image");
+        console.log(error);
+        res.status(400).json({ sucess: false, message: "failed to save profile pic" });
+    }
+
+});
 
 module.exports = router;

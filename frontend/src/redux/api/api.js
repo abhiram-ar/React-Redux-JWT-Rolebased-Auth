@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "./../slices/authSlice";
+import {setCredentials } from "./../slices/authSlice"
+import { jwtDecode } from "jwt-decode";
+
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:3000",
     credentials: "include",
@@ -20,8 +23,14 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (result?.error?.status === 401) {
         // get a fresh access token
         // refersh token will be provider by browser as cookie
-        const refershResult = await baseQuery("/refersh", api, extraOptions);
-        if (refershResult?.data) {
+        const newAccessToken = await baseQuery("/refresh", api, extraOptions);
+        console.log(`refershed acced token`, newAccessToken);
+
+        if (newAccessToken?.data) {
+            const payload = jwtDecode(newAccessToken.data)
+            api.dispatch(setCredentials({token:newAccessToken.data, user:payload.username}))
+
+            //retry the failed request
             result = await baseQuery(args, api, extraOptions);
         } else {
             api.dispatch(logout());
@@ -49,7 +58,7 @@ const api = createApi({
         refersh: builder.mutation({
             query: () => ({
                 url: "/refresh",
-                method: "POST",
+                method: "POST", //should be changed to get
             }),
         }),
         getUserDetails: builder.query({

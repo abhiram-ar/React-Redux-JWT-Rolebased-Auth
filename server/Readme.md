@@ -5,6 +5,10 @@
 cors - for accesing resources from differnt origin in fontend
 npm install cors
 
+multer - to handle file upload from the fontend
+
+clodinary - forward the file stored in multer to clodinary
+
 
 
 ### MongoDB connection string pattern

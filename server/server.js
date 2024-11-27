@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
     res.send("hello world");
 });
 
-app.post("/refresh", refresh);
+app.get("/refresh", refresh);
 
 //official rotues
 app.use("/auth", authRouter);
