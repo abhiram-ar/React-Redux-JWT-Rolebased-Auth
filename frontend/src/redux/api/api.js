@@ -3,8 +3,10 @@ import { logout } from "./../slices/authSlice";
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:3000",
     credentials: "include",
-    preapareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token;
+        console.log("token req", token);
+        console;
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
@@ -63,5 +65,10 @@ const api = createApi({
     }),
 });
 
-export const { useLoginMutation, useRefershMutation } = api;
+export const {
+    useLoginMutation,
+    useRefershMutation,
+    useUpdateProfileImageMutation,
+    useGetUserDetailsQuery,
+} = api;
 export default api;
