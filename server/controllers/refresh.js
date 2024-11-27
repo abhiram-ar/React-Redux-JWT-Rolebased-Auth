@@ -3,6 +3,7 @@ const RefreshTokenModel = require("./../models/jwtModel");
 const UserModel = require("./../models/userModal");
 
 const refresh = async (req, res) => {
+    console.log(`hit: refersh route`);
     const { refreshJWT } = req.cookies;
     if (!refreshJWT) {
         return res

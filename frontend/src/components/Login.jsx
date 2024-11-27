@@ -1,6 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "../redux/api/api";
+import { useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import {setCredentials} from "./../redux/slices/authSlice"
+import { useNavigate } from "react-router-dom";
+
 const Signup = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
     const [login] = useLoginMutation();
     const {
         register,
@@ -8,12 +15,19 @@ const Signup = () => {
         formState: { errors },
     } = useForm();
 
-    function handleLogin(formdata) {
-        console.log(formdata);
-        login(formdata)
+    async function handleLogin(formdata) {
+        console.log("form data", formdata);
+        try {
+            const accessToken = await login(formdata).unwrap();
+            console.log("response", accessToken);
+            const payload = await jwtDecode(accessToken);
+            dispatch(setCredentials({ user: payload.username, token: accessToken }));
+            navigate("/home")
+        } catch (error) {
+            console.log(error.data?.message || error);
+            //to-do: do a tost of error message
+        }
     }
-
-    console.log(errors);
 
     return (
         <>

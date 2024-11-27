@@ -4,7 +4,8 @@ const UserModel = require("./../models/userModal");
 const RefreshTokenModel = require("./../models/jwtModel");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
-const { error } = require("console");
+const cookieParser = require("cookie-parser");
+const logoutController  = require("./../controllers/logoutController")
 
 const router = express.Router();
 const userAuthSchema = z.object({
@@ -57,7 +58,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const fetchedUser = await UserModel.findOne({ email: email });
     console.log("login: user trying to login");
-    
+
     console.assert(fetchedUser, "user not found in DB");
     if (!fetchedUser) {
         return res
@@ -88,7 +89,9 @@ router.post("/login", async (req, res) => {
 
     res.cookie("refreshJWT", refreshToken, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, //1 day
+        secure: false,
+        sameSite: "Lax",
+        maxAge: 24 * 60 * 60 * 1000,
     });
 
     try {
@@ -100,10 +103,15 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.log(`error while saving refresh token to DB`);
         console.log(error);
-        return res.status(500).json({success:false, message:"error while saving JWT to DB"})
+        return res
+            .status(500)
+            .json({ success: false, message: "error while saving JWT to DB" });
     }
 
     res.json(accessToken);
 });
+
+
+router.post("/logout", logoutController )
 
 module.exports = router;
