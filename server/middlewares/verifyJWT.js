@@ -7,7 +7,7 @@ const verifyJWT = (req, res, next) => {
 
     if (!auth)
         return res
-            .status(401)
+            .status(400)
             .json({ success: false, message: "not authentication header" });
 
     let token = auth.split(" ")[1];
@@ -15,7 +15,7 @@ const verifyJWT = (req, res, next) => {
         if (err) {
             console.log(`JWT error : ${err.name}`);
             return res
-                .status(403)
+                .status(401)
                 .json({ success: false, message: err.message });
         }
         console.log(`Decoded JWT user-:`,decoded);

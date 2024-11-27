@@ -56,9 +56,9 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const fetchedUser = await UserModel.findOne({ email: email });
-    console.log("user trying to login");
-    console.assert(fetchedUser, );
-
+    console.log("login: user trying to login");
+    
+    console.assert(fetchedUser, "user not found in DB");
     if (!fetchedUser) {
         return res
             .status(404)

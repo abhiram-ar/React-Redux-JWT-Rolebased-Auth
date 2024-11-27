@@ -1,6 +1,10 @@
 ### TODOs
 - Time-to-leave index for expired refreshtokens
 
+### Depenencies
+cors - for accesing resources from differnt origin in fontend
+npm install cors
+
 
 
 ### MongoDB connection string pattern

@@ -6,14 +6,18 @@ const verifyJWT = require("./middlewares/verifyJWT.js");
 const refresh = require("./controllers/refresh.js");
 const logoutController = require("./controllers/logoutController.js");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan")
+const cors = require("cors")
 
 //app initailization
 dbConnect();
 const app = express();
 
 //middlewares
+app.use(cors())
 app.use(cookieParser());
 app.use(express.json());
+app.use(morgan("dev"))
 
 app.get("/", (req, res) => {
     res.send("hello world");
