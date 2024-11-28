@@ -7,8 +7,10 @@ const refresh = require("./controllers/refresh.js");
 const logoutController = require("./controllers/logoutController.js");
 const morgan = require("morgan");
 const cors = require("cors");
-const cookieParser = require("cookie-parser")
-const userRouter = require("./routes/userRouter.js")
+const cookieParser = require("cookie-parser");
+const userRouter = require("./routes/userRouter.js");
+const adminRouter = require("./routes/adminRouter.js")
+const isAdmin = require("./middlewares/isAdmin.js")
 
 //app initailization
 dbConnect();
@@ -17,7 +19,11 @@ const app = express();
 //middlewares
 app.use(
     cors({
-        origin: ["http://127.0.0.1:5173","http://127.0.0.1:4173","http://localhost:5173" ],
+        origin: [
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:4173",
+            "http://localhost:5173",
+        ],
         credentials: true,
     })
 );
@@ -36,10 +42,11 @@ app.use("/auth", authRouter);
 
 //protected rotues
 app.use(verifyJWT);
-app.get("/home", (req, res) => {
+app.get("/protected", (req, res) => {
     res.send("home");
 });
-app.use("/user",userRouter )
+app.use("/user", userRouter);
+app.use("/admin",isAdmin, adminRouter)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
