@@ -20,7 +20,11 @@ const logout = async (req, res) => {
     try {
         await RefreshTokenModel.deleteOne({ token: refreshJWT });
         console.log(`logout: refresh token deleted from DB`);
-        res.clearCookie("refreshJWT", { httpOnly: true });
+        res.clearCookie("refreshJWT", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "Lax",
+        });
         res.status(200).send({
             sucess: true,
             message: "user logged out sucessfully",

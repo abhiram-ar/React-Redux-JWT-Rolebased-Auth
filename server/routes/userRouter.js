@@ -34,8 +34,6 @@ router.patch("/updateProfilePic", upload.single("image"), async (req, res) => {
             profilePicURL: uploadResult.url,
         });
 
-        console.log("db res");
-        console.log(res)
 
         return res
             .status(200)

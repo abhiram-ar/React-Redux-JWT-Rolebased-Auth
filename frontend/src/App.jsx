@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useRefershMutation } from "./redux/api/api";
+import { useRefershQuery } from "./redux/api/api";
 import { setCredentials } from "./redux/slices/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 const App = () => {
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
-    const [getNewAccessToken] = useRefershMutation();
+    const { data, isLoading, isError } = useRefershQuery();
+    console.log(data);
     const dispatch = useDispatch();
+
     useEffect(() => {
         const fetchNewAccessToken = async () => {
-            if (!token) {
+            if (!token && !isLoading) {
                 try {
-                    const newAccessToken = await getNewAccessToken().unwrap();
+                    const newAccessToken = data;
                     const payload = await jwtDecode(newAccessToken);
                     dispatch(
                         setCredentials({
@@ -23,20 +25,20 @@ const App = () => {
                             user: payload.username,
                         })
                     );
-                    //navigate("/home");
+                    navigate("/home");
                 } catch (error) {
                     console.log(error);
                 }
             }
         };
         fetchNewAccessToken();
-    }, []);
+    }, [data]);
 
-    return (
-        <>
-            <Outlet />
-        </>
-    );
+    if (isLoading) {
+        return <>loading...</>;
+    }
+
+    return <> {<Outlet />} </>;
 };
 
 export default App;

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "./../slices/authSlice";
-import {setCredentials } from "./../slices/authSlice"
+import { setCredentials } from "./../slices/authSlice";
 import { jwtDecode } from "jwt-decode";
 
 const baseQuery = fetchBaseQuery({
@@ -27,8 +27,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         console.log(`refershed acced token`, newAccessToken);
 
         if (newAccessToken?.data) {
-            const payload = jwtDecode(newAccessToken.data)
-            api.dispatch(setCredentials({token:newAccessToken.data, user:payload.username}))
+            const payload = jwtDecode(newAccessToken.data);
+            api.dispatch(
+                setCredentials({
+                    token: newAccessToken.data,
+                    user: payload.username,
+                })
+            );
 
             //retry the failed request
             result = await baseQuery(args, api, extraOptions);
@@ -41,6 +46,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 const api = createApi({
     baseQuery: baseQueryWithReauth,
+    tagTypes: ["userProfile"],
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (credentials) => ({
@@ -55,14 +61,12 @@ const api = createApi({
                 method: "POST",
             }),
         }),
-        refersh: builder.mutation({
-            query: () => ({
-                url: "/refresh",
-                method: "POST", //should be changed to get
-            }),
+        refersh: builder.query({
+            query: () => "/refresh",
         }),
         getUserDetails: builder.query({
             query: () => "user/profile",
+            providesTags: ["userProfile"],
         }),
         updateProfileImage: builder.mutation({
             query: (formData) => ({
@@ -70,14 +74,16 @@ const api = createApi({
                 method: "PATCH",
                 body: formData,
             }),
+            invalidatesTags: ["userProfile"],
         }),
     }),
 });
 
 export const {
     useLoginMutation,
-    useRefershMutation,
-    useUpdateProfileImageMutation,
+    useLogoutMutation,
+    useRefershQuery,
     useGetUserDetailsQuery,
+    useUpdateProfileImageMutation,
 } = api;
 export default api;
