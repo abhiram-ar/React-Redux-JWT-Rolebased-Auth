@@ -1,14 +1,13 @@
-import { useGetAllUsersQuery } from "../../redux/api/api"
+import { useGetAllUsersQuery } from "../../redux/api/api";
 import UserInfo from "./UserInfo";
 
+
 const AdminDashBoard = () => {
-    const { data,isLoading ,isFetching, isError, refetch } = useGetAllUsersQuery();
+    const { data, isLoading, isFetching, isError, refetch } =
+        useGetAllUsersQuery();
     console.log(data);
-    
-    if(!data){
-     return(<>loading...</>)
-    }
-    
+
+
     return (
         <div>
             <h1>Admin Dashboard</h1>
@@ -29,8 +28,9 @@ const AdminDashBoard = () => {
                 </div>
                 <hr />
                 {/* table body */}
-                {data.map((user,index)=> <UserInfo key={user["_id"]} user={user} index={index+1}/>)}
-                
+                {!isLoading &&  !isFetching && data && data.map((user, index) => (
+                    <UserInfo key={user["_id"]} user={user} index={index + 1} />
+                ))}
             </div>
         </div>
     );

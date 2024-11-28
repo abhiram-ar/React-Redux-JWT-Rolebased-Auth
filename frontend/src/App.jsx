@@ -25,7 +25,11 @@ const App = () => {
                             user: payload.username,
                         })
                     );
-                    navigate("/home");
+                    if (payload.isAdmin) {
+                        navigate("/admin");
+                    } else {
+                        navigate("/home");
+                    }
                 } catch (error) {
                     console.log(error);
                 }

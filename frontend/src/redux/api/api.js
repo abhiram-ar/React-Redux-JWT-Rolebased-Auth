@@ -8,8 +8,7 @@ const baseQuery = fetchBaseQuery({
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token;
-        console.log("token req", token);
-        console;
+        console.log("new token req: ", token);
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
@@ -20,7 +19,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
     console.log("modified basequery", result);
-    if (result?.error?.status === 401) {
+    if (result?.error?.status === 401 || result?.error?.status === 400) {
         // get a fresh access token
         // refersh token will be provider by browser as cookie
         const newAccessToken = await baseQuery("/refresh", api, extraOptions);
@@ -77,10 +76,15 @@ const api = createApi({
             invalidatesTags: ["userProfile"],
         }),
         getAllUsers: builder.query({
-            query: ()=> "/admin/users",
-            providesTags:['allUsers']
-
-        })
+            query: () => "/admin/users",
+            providesTags: ["allUsers"],
+        }),
+        deleteUser: builder.mutation({
+            query: (userId) => ({
+                url: `/admin/user/:${userId}`,
+                method: "DELETE",
+            }),
+        }),
     }),
 });
 
@@ -91,5 +95,6 @@ export const {
     useGetUserDetailsQuery,
     useUpdateProfileImageMutation,
     useGetAllUsersQuery,
+    useDeleteUserMutation,
 } = api;
 export default api;
