@@ -48,7 +48,7 @@ router.post("/signup", async (req, res) => {
         console.log("user saved sucessful");
     } catch (error) {
         console.log(`saving user failed`);
-        return res.status(400).json({ success: "failed" });
+        return res.status(400).json({ success: false, message:"failed/user already exist" });
     }
 
     res.status(201).json({ success: true });

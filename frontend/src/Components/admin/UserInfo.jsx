@@ -1,8 +1,13 @@
 import defaultProfilePic from "./../../assets/noProfileAvatar.png";
+import { useDeleteUserMutation } from "../../redux/api/api";
+import {useDispatch} from "react-redux"
 
 const UserInfo = ({ index, user }) => {
+    const [deleteUser] =  useDeleteUserMutation()
+
     const handleDelete = () => {
         console.log("deletedd");
+        deleteUser(user["_id"])
     };
 
     return (

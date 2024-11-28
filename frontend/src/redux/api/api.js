@@ -19,6 +19,9 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
     console.log("modified basequery", result);
+
+    // 401 - accesToken expired or invalid
+    // 400 - no accessToken in the header,cold start fix
     if (result?.error?.status === 401 || result?.error?.status === 400) {
         // get a fresh access token
         // refersh token will be provider by browser as cookie
@@ -81,9 +84,10 @@ const api = createApi({
         }),
         deleteUser: builder.mutation({
             query: (userId) => ({
-                url: `/admin/user/:${userId}`,
+                url: `/admin/user/${userId}`,
                 method: "DELETE",
             }),
+            invalidatesTags: ["allUsers"]
         }),
     }),
 });
