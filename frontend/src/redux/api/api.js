@@ -90,10 +90,11 @@ const api = createApi({
         }),
         editUser: builder.mutation({
             query: (data) => ({
-                url: `/user/:id`,
+                url: `admin/user/${data["_id"]}`,
                 method: "PATCH",
                 body: data,
             }),
+            invalidatesTags: ['allUsers']
         }),
         registerUser: builder.mutation({
             query: (formdata)=>({

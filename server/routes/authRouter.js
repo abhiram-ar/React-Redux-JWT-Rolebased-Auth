@@ -26,8 +26,8 @@ router.post("/signup", async (req, res) => {
 
     //validate credentials and reject if invalid
     const user = userAuthSchema.safeParse({
-        username,
-        email,
+        username: username.trim(),
+        email: email.trim(),
         password,
         isAdmin,
     });

@@ -7,7 +7,7 @@ const verifyJWT = (req, res, next) => {
 
     if (!auth)
         return res
-            .status(400)
+            .status(401)
             .json({ success: false, message: "not authentication header" });
 
     let token = auth.split(" ")[1];
