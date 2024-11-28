@@ -102,7 +102,8 @@ const api = createApi({
                 method:"POST",
                 body:formdata
 
-            })
+            }),
+            invalidatesTags: ["allUsers"]
         })
     }),
 });

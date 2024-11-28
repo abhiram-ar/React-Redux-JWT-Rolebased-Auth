@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import  {useEditUserMutation} from "./../../redux/api/api"
+import { useEditUserMutation } from "./../../redux/api/api";
+import toast, { Toaster } from "react-hot-toast";
 
 // eslint-disable-next-line react/prop-types
 const EditOverlay = ({ setEditOverlay, editOverlay }) => {
@@ -14,20 +15,37 @@ const EditOverlay = ({ setEditOverlay, editOverlay }) => {
         },
     });
 
-    const [applyEdits] = useEditUserMutation()
+    const [applyEdits] = useEditUserMutation();
 
-    const handleUpdate = (formdata)=>{
+    const handleUpdate = async (formdata) => {
         const updatedData = {
             ...editOverlay,
-            ...formdata
+            ...formdata,
+        };
+        console.log(updatedData);
+        try {
+            await applyEdits(updatedData).unwrap()
+            toast.success("update sucessful")
+        } catch (error) {
+            console.log("error while updating user", error);
+            console.log("error while creating a new user");
+            console.log(error);
+            if (error.data?.name === "ZodError") {
+                error.data.issues.forEach((issue) => {
+                    toast.error(issue.message);
+                });
+            } else if (error.data?.message) {
+                toast.error(error.data.message);
+            } else {
+                toast.error("unexpected error");
+            }
         }
-        console.log(updatedData)
-        applyEdits(updatedData)
-    }
+    };
 
     return (
         <>
-            <div className="w-full h-full bg-[#272727]/30 p-5 pt-40 absolute">
+            <div className="w-full h-full bg-[#272727]/30 p-5 pt-40 absolute z-10">
+                <Toaster />
                 <form
                     onSubmit={handleSubmit((data) => handleUpdate(data))}
                     className="relative w-1/3 bg-[#272727] border border-black h-2/3 m-auto rounded-lg p-10 pt-0 flex flex-col gap-5 justify-center items-center backdrop-blur-lg shadow-[10px_15px_5px_10px_rgba(0,0,0,0.3)]"

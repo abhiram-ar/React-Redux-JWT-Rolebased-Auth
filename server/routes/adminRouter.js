@@ -65,7 +65,7 @@ router.patch("/user/:id", async (req, res) => {
 
     if (!userUpdateDetails.success) {
         console.log("patch.auth/user: invalid user credentials");
-        return res.status(400).json(user.error);
+        return res.status(400).json(userUpdateDetails.error);
     }
 
     try {

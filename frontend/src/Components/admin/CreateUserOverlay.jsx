@@ -17,7 +17,7 @@ const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
         try {
             await registerUser(formdata).unwrap();
             reset();
-            toast("User created");
+            toast.success("User created");
         } catch (error) {
             console.log("error while creating a new user");
             console.log(error);
@@ -38,7 +38,7 @@ const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
 
     return (
         <>
-            <div className="w-full h-full bg-[#272727]/30 p-5 pt-40 absolute">
+            <div className="w-full h-full bg-[#272727]/30 p-5 pt-40 absolute z-10">
                 <Toaster />
                 <form
                     onSubmit={handleSubmit((data) => handleCreateUser(data))}
