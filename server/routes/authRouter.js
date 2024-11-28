@@ -11,7 +11,7 @@ const router = express.Router();
 const userAuthSchema = z.object({
     username: z
         .string()
-        .min(5, { message: "username should contain 5 or more characters" })
+        .min(3, { message: "username should contain 3 or more characters" })
         .optional(),
     email: z.string().email({ message: "Invalid email address" }),
 
@@ -76,7 +76,7 @@ router.post("/login", async (req, res) => {
     const payload = {
         id: fetchedUser._id,
         username: fetchedUser.username,
-        isadmin: fetchedUser.isAdmin,
+        isAdmin: fetchedUser.isAdmin,
     };
 
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRECT, {

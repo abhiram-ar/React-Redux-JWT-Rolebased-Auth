@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import Home from "./Components/user/Home.jsx";
 import ProtectedRoute from "./Components/user/ProtectedRoute.jsx";
+import AdminDashBoard from "./Components/admin/AdminDashBoard.jsx";
 
 const appRouter = createBrowserRouter([
     {
@@ -27,6 +28,11 @@ const appRouter = createBrowserRouter([
             {
                 path: "/signup",
                 element: <Signup />,
+            },
+
+            {
+                path: "/admin",
+                element: <AdminDashBoard />,
             },
         ],
     },

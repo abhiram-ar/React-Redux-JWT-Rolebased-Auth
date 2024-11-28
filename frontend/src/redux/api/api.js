@@ -46,7 +46,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 const api = createApi({
     baseQuery: baseQueryWithReauth,
-    tagTypes: ["userProfile"],
+    tagTypes: ["userProfile", "allUsers"],
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (credentials) => ({
@@ -76,6 +76,11 @@ const api = createApi({
             }),
             invalidatesTags: ["userProfile"],
         }),
+        getAllUsers: builder.query({
+            query: ()=> "/admin/users",
+            providesTags:['allUsers']
+
+        })
     }),
 });
 
@@ -85,5 +90,6 @@ export const {
     useRefershQuery,
     useGetUserDetailsQuery,
     useUpdateProfileImageMutation,
+    useGetAllUsersQuery,
 } = api;
 export default api;

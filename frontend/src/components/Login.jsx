@@ -24,7 +24,12 @@ const Signup = () => {
             dispatch(
                 setCredentials({ user: payload.username, token: accessToken })
             );
-            navigate("/home");
+            console.log("payload",payload)
+            if (payload.isAdmin) {
+                navigate("/admin");
+            } else {
+                navigate("/home");
+            }
         } catch (error) {
             console.log(error.data?.message || error);
             //to-do: do a tost of error message
