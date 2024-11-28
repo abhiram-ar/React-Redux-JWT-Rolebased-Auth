@@ -8,7 +8,6 @@ const baseQuery = fetchBaseQuery({
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token;
-        console.log("new token req: ", token);
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
@@ -18,15 +17,15 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-    console.log("modified basequery", result);
+    console.log("modified basequery: ", result);
 
     // 401 - accesToken expired or invalid
-    // 400 - no accessToken in the header,cold start fix
-    if (result?.error?.status === 401 || result?.error?.status === 400) {
+    // 401 - no accessToken in the header,cold start fix
+    if (result?.error?.status === 401) {
         // get a fresh access token
         // refersh token will be provider by browser as cookie
         const newAccessToken = await baseQuery("/refresh", api, extraOptions);
-        console.log(`refershed acced token`, newAccessToken);
+        console.log("refreshed access token:  ", newAccessToken);
 
         if (newAccessToken?.data) {
             const payload = jwtDecode(newAccessToken.data);
@@ -87,8 +86,23 @@ const api = createApi({
                 url: `/admin/user/${userId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["allUsers"]
+            invalidatesTags: ["allUsers"],
         }),
+        editUser: builder.mutation({
+            query: (data) => ({
+                url: `/user/:id`,
+                method: "PATCH",
+                body: data,
+            }),
+        }),
+        registerUser: builder.mutation({
+            query: (formdata)=>({
+                url: "auth/signup",
+                method:"POST",
+                body:formdata
+
+            })
+        })
     }),
 });
 
@@ -100,5 +114,6 @@ export const {
     useUpdateProfileImageMutation,
     useGetAllUsersQuery,
     useDeleteUserMutation,
+    useRegisterUserMutation
 } = api;
 export default api;

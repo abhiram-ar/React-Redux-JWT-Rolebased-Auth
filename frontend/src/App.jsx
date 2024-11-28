@@ -10,7 +10,6 @@ const App = () => {
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
     const { data, isLoading, isError } = useRefershQuery();
-    console.log(data);
     const dispatch = useDispatch();
 
     useEffect(() => {

@@ -1,14 +1,23 @@
 import defaultProfilePic from "./../../assets/noProfileAvatar.png";
 import { useDeleteUserMutation } from "../../redux/api/api";
 import {useDispatch} from "react-redux"
+import { useState } from "react";
+import EditOverlay from "./EditOverlay";
 
-const UserInfo = ({ index, user }) => {
+const UserInfo = ({ index, user, setEditOverlay, showEditOverlay }) => {
     const [deleteUser] =  useDeleteUserMutation()
-
+    
     const handleDelete = () => {
         console.log("deletedd");
         deleteUser(user["_id"])
     };
+
+    const handleEdit= ()=>{
+        setEditOverlay(true)
+
+    }
+
+  
 
     return (
         <div className="flex justify-between items-center">
@@ -25,7 +34,7 @@ const UserInfo = ({ index, user }) => {
                 <h1>{user.email}</h1>
             </div>
             <div className="flex justify-center items-center gap-5">
-                <button>edit</button>
+                <button onClick={handleEdit}>edit</button>
                 <button onClick={handleDelete}>delete</button>
             </div>
         </div>
