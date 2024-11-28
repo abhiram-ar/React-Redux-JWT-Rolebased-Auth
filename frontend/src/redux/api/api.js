@@ -114,6 +114,7 @@ export const {
     useUpdateProfileImageMutation,
     useGetAllUsersQuery,
     useDeleteUserMutation,
+    useEditUserMutation,
     useRegisterUserMutation
 } = api;
 export default api;

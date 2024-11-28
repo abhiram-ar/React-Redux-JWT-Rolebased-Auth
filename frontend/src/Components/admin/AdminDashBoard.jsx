@@ -5,19 +5,31 @@ import UserInfo from "./UserInfo";
 import CreateUserOverlay from "./CreateUserOverlay";
 
 const AdminDashBoard = () => {
-    const { data, isLoading, isFetching, isError, refetch } =
-        useGetAllUsersQuery();
+    const { data, isLoading, isFetching, refetch } = useGetAllUsersQuery();
     console.log(data);
-    const [showEditOverlay, setEditOverlay] = useState(false);
-    const [showCreateUserOverlay, setShowCreateUserOverlay] = useState(true);
+
+    const [editOverlay, setEditOverlay] = useState(null);
+    const [showCreateUserOverlay, setShowCreateUserOverlay] = useState(false);
+
     return (
         <div>
-            {showCreateUserOverlay && <CreateUserOverlay setShowCreateUserOverlay={setShowCreateUserOverlay}/>}
-            {showEditOverlay && <EditOverlay setEditOverlay={setEditOverlay} />}
+            {showCreateUserOverlay && (
+                <CreateUserOverlay
+                    setShowCreateUserOverlay={setShowCreateUserOverlay}
+                />
+            )}
+            {editOverlay && (
+                <EditOverlay
+                    setEditOverlay={setEditOverlay}
+                    editOverlay={editOverlay}
+                />
+            )}
             <h1>Admin Dashboard</h1>
             <input type="text" placeholder="search" />
             <button onClick={() => refetch()}>refersh</button>
-            <button onClick={()=> setShowCreateUserOverlay(true)}>Create</button>
+            <button onClick={() => setShowCreateUserOverlay(true)}>
+                Create
+            </button>
             <div className="flex flex-col text-center p-10">
                 {/* table title */}
                 <div className="flex justify-between items-center text-xl font-semibold">
@@ -41,7 +53,6 @@ const AdminDashBoard = () => {
                             key={user["_id"]}
                             user={user}
                             index={index + 1}
-                            showEditOverlay={showEditOverlay}
                             setEditOverlay={setEditOverlay}
                         />
                     ))}

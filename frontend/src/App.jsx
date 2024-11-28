@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const App = () => {
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
-    const { data, isLoading, isError } = useRefershQuery();
+    const { data, isLoading } = useRefershQuery();
     const dispatch = useDispatch();
 
     useEffect(() => {

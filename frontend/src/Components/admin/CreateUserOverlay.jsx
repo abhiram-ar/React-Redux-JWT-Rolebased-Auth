@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useRegisterUserMutation } from "../../redux/api/api";
 import toast, { Toaster } from "react-hot-toast";
 
+// eslint-disable-next-line react/prop-types
 const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
     const {
         register,
@@ -10,11 +11,11 @@ const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
         reset,
     } = useForm();
 
-    const [registerUser, { isLoading }] = useRegisterUserMutation();
+    const [registerUser ] = useRegisterUserMutation();
 
     const handleCreateUser = async (formdata) => {
         try {
-            const res = await registerUser(formdata).unwrap();
+            await registerUser(formdata).unwrap();
             reset();
             toast("User created");
         } catch (error) {
@@ -34,7 +35,6 @@ const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
         }
     };
 
-    const notify = () => toast("Here is your toast.");
 
     return (
         <>
@@ -79,6 +79,7 @@ const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
                         {...register("email", {
                             required: true,
                             pattern:
+                                // eslint-disable-next-line no-useless-escape
                                 /[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}/,
                         })}
                         placeholder="email"
