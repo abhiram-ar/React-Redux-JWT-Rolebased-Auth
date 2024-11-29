@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { setCredentials } from "../../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const Signup = () => {
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const Signup = () => {
             }
         } catch (error) {
             console.log(error.data?.message || error);
+            toast.error(error.data?.message)
             //to-do: do a tost of error message
         }
     }
@@ -39,6 +41,7 @@ const Signup = () => {
     return (
         <>
             <div className="w-screen h-screen bg-[#272727] p-5 pt-40">
+                <Toaster/>
                 <form
                     onSubmit={handleSubmit((data) => handleLogin(data))}
                     className="relative min-w-96 w-1/3 bg-[#272727] border border-black h-4/5 m-auto rounded-lg p-10 pt-0 flex flex-col gap-5 justify-center items-center backdrop-blur-lg shadow-[10px_15px_5px_10px_rgba(0,0,0,0.3)]"
