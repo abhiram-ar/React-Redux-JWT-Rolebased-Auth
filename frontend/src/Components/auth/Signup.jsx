@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-const CreateUserOverlay = ({ setShowCreateUserOverlay }) => {
+const CreateUserOverlay = () => {
     const {
         register,
         handleSubmit,

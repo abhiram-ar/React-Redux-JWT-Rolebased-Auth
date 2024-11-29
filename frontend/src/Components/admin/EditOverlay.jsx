@@ -27,6 +27,9 @@ const EditOverlay = ({ setEditOverlay, editOverlay }) => {
         try {
             await applyEdits(updatedData).unwrap()
             toast.success("update sucessful")
+            setTimeout(()=>{
+                setEditOverlay(null)
+            },2000)
         } catch (error) {
             console.log("error while updating user", error);
             console.log("error while creating a new user");

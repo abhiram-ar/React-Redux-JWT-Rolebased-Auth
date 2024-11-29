@@ -10,7 +10,7 @@ router.get("/test", (req, res) => {
 
 router.get("/users", async (req, res) => {
     try {
-        const users = await userModal.find();
+        const users = await userModal.find({isAdmin:false});
         res.status(200).json(users);
     } catch (error) {
         console.assert(
