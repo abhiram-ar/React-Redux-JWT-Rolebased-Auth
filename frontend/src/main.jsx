@@ -2,8 +2,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import Login from "./components/Login.jsx";
-import Signup from "./components/Signup.jsx";
+import Login from "./Components/auth/Login.jsx";
+import Signup from "./Components/auth/Signup.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import Home from "./Components/user/Home.jsx";
@@ -15,6 +15,10 @@ const appRouter = createBrowserRouter([
         path: "/",
         element: <App />,
         children: [
+            {
+                index:true,
+                element: <Login/>
+            },
             {
                 path: "/home",
                 element: <ProtectedRoute />,
@@ -31,7 +35,8 @@ const appRouter = createBrowserRouter([
 
             {
                 path: "/admin",
-                element: <AdminDashBoard />,
+                element: <ProtectedRoute />,
+                children: [{ path: "", element: <AdminDashBoard /> }],
             },
         ],
     },

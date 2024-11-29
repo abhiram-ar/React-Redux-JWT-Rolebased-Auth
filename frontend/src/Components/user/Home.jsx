@@ -4,23 +4,22 @@ import {
     useUpdateProfileImageMutation,
 } from "./../../redux/api/api";
 import { useGetUserDetailsQuery } from "./../../redux/api/api";
-import { setCredentials } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { logout as clearStore } from "./../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import defaultProfilePic from "./../../assets/noProfileAvatar.png";
 import toast, { Toaster } from "react-hot-toast";
 import {useRef} from "react"
+import api from "./../../redux/api/api"
 
 const Home = () => {
     const [selectedImage, setSelectedImage] = useState(null);
-    const [uploadImage, { isLoading ,isSuccess:imageUploadSucess }] = useUpdateProfileImageMutation();
+    const [uploadImage, { isLoading }] = useUpdateProfileImageMutation();
     const [logout] = useLogoutMutation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {
         data,
-        isFetching, //greyout if have time
         isSuccess,
     } = useGetUserDetailsQuery();
 
@@ -52,8 +51,8 @@ const Home = () => {
         try {
             const response = await logout().unwrap();
             console.log("logoutResponse", response);
-
             dispatch(clearStore());
+            dispatch(api.util.resetApiState());
             navigate("/login", { replace: true });
         } catch (error) {
             console.log(error);
@@ -107,7 +106,7 @@ const Home = () => {
                 <button
                     onClick={handleProfilePicUpdate}
                     disabled={isLoading}
-                    className=" bg-[#F2FED1] border  border-black px-3 py-1 rounded-2xl hover:bg-[#ABF600]"
+                    className={` bg-[#F2FED1] border  border-black px-3 py-1 rounded-2xl ${isLoading? "hover:bg-zinc-600" :  "hover:bg-[#ABF600]" }`}
                 >
                     Update
                 </button>

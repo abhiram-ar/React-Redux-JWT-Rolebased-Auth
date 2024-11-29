@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useLoginMutation } from "../redux/api/api";
+import { useLoginMutation } from "../../redux/api/api";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import { setCredentials } from "./../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { setCredentials } from "../../redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
     const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const Signup = () => {
             <div className="w-screen h-screen bg-[#272727] p-5 pt-40">
                 <form
                     onSubmit={handleSubmit((data) => handleLogin(data))}
-                    className="w-1/3 bg-[#272727] border border-black h-2/3 m-auto rounded-lg p-10 pt-0 flex flex-col gap-5 justify-center items-center backdrop-blur-lg shadow-[10px_15px_5px_10px_rgba(0,0,0,0.3)]"
+                    className="relative min-w-96 w-1/3 bg-[#272727] border border-black h-4/5 m-auto rounded-lg p-10 pt-0 flex flex-col gap-5 justify-center items-center backdrop-blur-lg shadow-[10px_15px_5px_10px_rgba(0,0,0,0.3)]"
                 >
                     <h2 className="text-3xl font-bold text-white mb-5 tracking-widest font-[inter]">
                         SingIn
@@ -94,6 +94,12 @@ const Signup = () => {
                     >
                         LOGIN{" "}
                     </button>
+                    <p className="absolute bottom-10 text-white">
+                        Dont have an account?{" "}
+                        <Link className="bg-[#404040] underline px-1" to="/signup">
+                            SignUp.
+                        </Link>
+                    </p>
                 </form>
             </div>
         </>

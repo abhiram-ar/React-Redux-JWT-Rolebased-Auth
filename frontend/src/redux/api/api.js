@@ -56,6 +56,10 @@ const api = createApi({
                 body: credentials,
             }),
         }),
+        getUserDetails: builder.query({
+            query: () => "user/profile",
+            providesTags: ["userProfile"],
+        }),
         logout: builder.mutation({
             query: () => ({
                 url: "auth/logout",
@@ -64,10 +68,6 @@ const api = createApi({
         }),
         refersh: builder.query({
             query: () => "/refresh",
-        }),
-        getUserDetails: builder.query({
-            query: () => "user/profile",
-            providesTags: ["userProfile"],
         }),
         updateProfileImage: builder.mutation({
             query: (formData) => ({
@@ -94,17 +94,16 @@ const api = createApi({
                 method: "PATCH",
                 body: data,
             }),
-            invalidatesTags: ['allUsers']
+            invalidatesTags: ["allUsers"],
         }),
         registerUser: builder.mutation({
-            query: (formdata)=>({
+            query: (formdata) => ({
                 url: "auth/signup",
-                method:"POST",
-                body:formdata
-
+                method: "POST",
+                body: formdata,
             }),
-            invalidatesTags: ["allUsers"]
-        })
+            invalidatesTags: ["allUsers"],
+        }),
     }),
 });
 

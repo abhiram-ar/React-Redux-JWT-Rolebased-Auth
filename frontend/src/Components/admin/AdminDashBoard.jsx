@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "./../../redux/api/api";
 import { logout as clearStore } from "./../../redux/slices/authSlice";
+import api from "./../../redux/api/api"
 
 const AdminDashBoard = () => {
     const { data, isLoading, isFetching, refetch } = useGetAllUsersQuery();
@@ -23,6 +24,7 @@ const AdminDashBoard = () => {
             const response = await logout().unwrap();
             console.log("logoutResponse", response);
 
+            dispatch(api.util.resetApiState());
             dispatch(clearStore());
             navigate("/login", { replace: true });
         } catch (error) {
@@ -55,9 +57,6 @@ const AdminDashBoard = () => {
                 />
             )}
 
-            <button onClick={() => filterUsers(data, searchQuery)}>
-                search
-            </button>
             <h1 className="text-2xl bg-[#F2FED1] w-fit font-bold p-2 mt ms-16">
                 Admin Dashboard
             </h1>

@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 import defaultProfilePic from "./../../assets/noProfileAvatar.png";
 import { useDeleteUserMutation } from "../../redux/api/api";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import EditOverlay from "./EditOverlay";
+
 
 const UserInfo = ({ index, user, setEditOverlay }) => {
     const [deleteUser] = useDeleteUserMutation();
