@@ -2,6 +2,7 @@ const express = require("express");
 const userModal = require("../models/userModal");
 const router = express.Router();
 const { z } = require("zod");
+const jwtModel = require("../models/jwtModel");
 
 router.get("/test", (req, res) => {
     res.send("hello");
@@ -10,7 +11,6 @@ router.get("/test", (req, res) => {
 router.get("/users", async (req, res) => {
     try {
         const users = await userModal.find();
-        console.log(users);
         res.status(200).json(users);
     } catch (error) {
         console.assert(
@@ -30,8 +30,10 @@ router.delete("/user/:id", async (req, res) => {
     console.log(id);
 
     try {
-        const result = await userModal.findByIdAndDelete(id);
-        console.log(result);
+        await userModal.findByIdAndDelete(id);
+
+        //clear all tokens related to user in store
+        const tokens = await jwtModel.deleteMany({ userID: id });
         return res
             .status(200)
             .json({ sucess: false, message: "user sucesfully deleted" });
@@ -40,6 +42,7 @@ router.delete("/user/:id", async (req, res) => {
             false,
             "delete.admin/user: Unable to delete user from Database"
         );
+        console.log(error);
         return res
             .status(500)
             .json({ success: false, message: "unable to delete user" });
@@ -74,12 +77,10 @@ router.patch("/user/:id", async (req, res) => {
             id,
             userUpdateDetails.data
         );
-        return res
-            .status(200)
-            .json({
-                success: true,
-                message: "user details updated sucessfully",
-            });
+        return res.status(200).json({
+            success: true,
+            message: "user details updated sucessfully",
+        });
     } catch (error) {
         console.assert(
             false,

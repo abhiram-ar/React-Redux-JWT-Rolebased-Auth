@@ -18,7 +18,7 @@ const verifyJWT = (req, res, next) => {
                 .status(401)
                 .json({ success: false, message: err.message });
         }
-        console.log(`Decoded JWT user-:`,decoded);
+        //console.log(`Decoded JWT user-:`,decoded);
         res.user = decoded;
         next();
     });

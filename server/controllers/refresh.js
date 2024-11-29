@@ -10,7 +10,7 @@ const refresh = async (req, res) => {
             .status(401)
             .json({ success: false, message: "No refresh token" });
     }
-
+    
     const fetchedTokenDetails = await RefreshTokenModel.findOne({
         token: refreshJWT,
     });
@@ -18,8 +18,12 @@ const refresh = async (req, res) => {
     if (!fetchedTokenDetails) {
         // the cookie needs to be identical in name and option, for browser to clear them
         // maxAge and expires is an exception
-        res.clearCookie("refreshJWT", { httpOnly: true });
-        return res.status(403).send("refresh token not found in DB");
+        res.clearCookie("refreshJWT", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "Lax",
+        });
+        return res.status(403).json({sucess:false, message:"refresh token not found in DB"});
     }
 
     jwt.verify(
@@ -28,6 +32,11 @@ const refresh = async (req, res) => {
         async (error, decoded) => {
             if (error) {
                 console.log(`error while verifying refresh token : `, err.name);
+                res.clearCookie("refreshJWT", {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "Lax",
+                });
                 return res.status(403).json({
                     success: false,
                     message: error.message,
@@ -51,8 +60,12 @@ const refresh = async (req, res) => {
 
                 return res.status(200).json(newAccessToken);
             } catch (error) {
-                console.log(`refreshing token: user not found`);
-                console.log(error);
+                console.log(`refreshing token: user not found in DB`);
+                res.clearCookie("refreshJWT", {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "Lax",
+                });
                 return res
                     .status(403)
                     .json({ sucess: false, message: "user not found in DB" });
